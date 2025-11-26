@@ -30,6 +30,7 @@ import { signOut } from "next-auth/react";
 import { Logo } from "@/components/Logo";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { ThemeToggle } from "../../theme-toggle";
 
 // Hamburger icon component
 const HamburgerIcon = ({
@@ -150,12 +151,10 @@ const UserMenu = ({
   userName,
   userEmail,
   userAvatar,
-  onItemClick,
 }: {
   userName?: string | null;
   userEmail?: string | null;
   userAvatar?: string | null;
-  onItemClick?: (item: string) => void;
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -189,15 +188,15 @@ const UserMenu = ({
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => onItemClick?.("profile")}>
-        Profile
-      </DropdownMenuItem>
-      <DropdownMenuItem onClick={() => onItemClick?.("settings")}>
-        Settings
-      </DropdownMenuItem>
-      <DropdownMenuItem onClick={() => onItemClick?.("billing")}>
-        Billing
-      </DropdownMenuItem>
+
+      <Link href="/add-tools">
+        <DropdownMenuItem>Add Tools</DropdownMenuItem>
+      </Link>
+      <Link href="/manage-tools">
+        <DropdownMenuItem>Manage Tools</DropdownMenuItem>
+      </Link>
+      <DropdownMenuItem>Profile</DropdownMenuItem>
+      <DropdownMenuItem>Settings</DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
         Log out
@@ -363,46 +362,49 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
             )}
           </div>
           {/* Right side */}
-          {userEmail ? (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                {/* Info menu */}
-                <InfoMenu onItemClick={onInfoItemClick} />
-                {/* Notification */}
-                <NotificationMenu
-                  notificationCount={notificationCount}
-                  onItemClick={onNotificationItemClick}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {userEmail ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  {/* Info menu */}
+                  <InfoMenu onItemClick={onInfoItemClick} />
+                  {/* Notification */}
+                  <NotificationMenu
+                    notificationCount={notificationCount}
+                    onItemClick={onNotificationItemClick}
+                  />
+                </div>
+                {/* User menu */}
+                <UserMenu
+                  userName={userName}
+                  userEmail={userEmail}
+                  userAvatar={userAvatar}
+                  onItemClick={onUserItemClick}
                 />
               </div>
-              {/* User menu */}
-              <UserMenu
-                userName={userName}
-                userEmail={userEmail}
-                userAvatar={userAvatar}
-                onItemClick={onUserItemClick}
-              />
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <Link href="/login">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                >
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button
-                  size="sm"
-                  className="text-sm font-medium px-4 h-9 rounded-md shadow-sm"
-                >
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
-          )}
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button
+                    size="sm"
+                    className="text-sm font-medium px-4 h-9 rounded-md shadow-sm"
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </header>
     );
