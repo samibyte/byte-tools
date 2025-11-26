@@ -380,7 +380,6 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
                   userName={userName}
                   userEmail={userEmail}
                   userAvatar={userAvatar}
-                  onItemClick={onUserItemClick}
                 />
               </div>
             ) : (
