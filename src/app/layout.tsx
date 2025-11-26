@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar05 } from "@/components/ui/shadcn-io/navbar-05";
 import Footer from "@/components/footer";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { inter } from "./ui/fonts";
+import { Toaster } from "react-hot-toast";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Byte Tools",
@@ -26,16 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${inter.className} antialiased`}>
         {/* Header */}
-        <Navbar05 />
+        <Navbar />
         {/* Main  */}
-        <main>{children}</main>
+        <main className="min-h-screen">{children}</main>
 
         {/* Footer */}
         <Footer />
+        <Toaster />
       </body>
     </html>
   );
