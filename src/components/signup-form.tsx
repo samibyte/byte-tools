@@ -15,6 +15,7 @@ import { LabelInputContainer } from "./LabelInputContainer";
 interface Inputs {
   firstName: string;
   lastName: string;
+  image: string;
   email: string;
   password: string;
 }
@@ -127,7 +128,25 @@ export default function SignupForm() {
             )}
           </LabelInputContainer>
         </div>
-
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="image">Profile Image URL (optional)</Label>
+          <Input
+            {...register("image", {
+              validate: (v) =>
+                !v ||
+                v.startsWith("http") ||
+                v.startsWith("data:image/") ||
+                "Image must be a valid URL or base64 string",
+            })}
+            id="image"
+            placeholder="Enter image URL (optional)"
+            type="text"
+            disabled={isLoading}
+          />
+          {errors.image && (
+            <p className="text-xs text-red-500 mt-1">{errors.image.message}</p>
+          )}
+        </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
           <Input
