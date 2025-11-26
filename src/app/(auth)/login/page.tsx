@@ -1,10 +1,13 @@
-"use client";
-import LoginForm from "@/components/login-form";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+const LoginForm = dynamic(() => import("@/components/login-form"), {
+  ssr: false,
+});
 
-export default function page() {
+export default function LoginPage() {
   return (
-    <>
+    <Suspense fallback={<div>Loading …</div>}>
       <LoginForm />
-    </>
+    </Suspense>
   );
 }
