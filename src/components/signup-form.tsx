@@ -71,7 +71,9 @@ export default function SignupForm() {
     setIsLoading(true);
 
     try {
-      await signIn(provider, { callbackUrl: "/" });
+      await signIn(provider, {
+        callbackUrl: provider === "google" ? "/" : undefined,
+      });
     } catch (error) {
       console.error(`${provider} sign in error:`, error);
       toast.error(`Failed to sign up with ${provider}`);
