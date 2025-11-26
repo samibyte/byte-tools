@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { Search, CheckCircle, Bookmark, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import StepCard from "./ui/StepCard";
 
 const steps = [
@@ -58,12 +57,6 @@ export default function HowItWorks() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 sm:mb-20"
         >
-          <Badge
-            variant="secondary"
-            className="mb-4 bg-primary/10 text-primary hover:bg-primary/15"
-          >
-            Simple Process
-          </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
             How It{" "}
             <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">

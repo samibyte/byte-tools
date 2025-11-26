@@ -7,7 +7,6 @@ import ToolCard from "@/components/ToolCard";
 import Link from "next/link";
 import { IconMoodEmpty } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 
 interface Tool {
@@ -86,12 +85,6 @@ export default function LatestTools() {
           transition={{ duration: 0.7 }}
           className="text-center mb-16 sm:mb-20"
         >
-          <Badge
-            variant="secondary"
-            className="mb-4 bg-primary/10 text-primary hover:bg-primary/15"
-          >
-            Latest Tools
-          </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
             Discover{" "}
             <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
