@@ -68,7 +68,7 @@ const ToolCard = React.memo<ToolCardProps>(
           {/* Image */}
           <div className="relative overflow-hidden aspect-video bg-muted">
             <Image
-              src={image}
+              src={image && image}
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
