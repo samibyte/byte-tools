@@ -37,7 +37,7 @@ export default function LoginForm() {
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        callbackUrl: callbackUrl,
+        redirect: false,
       });
 
       if (result?.error) {
@@ -46,7 +46,7 @@ export default function LoginForm() {
       }
 
       toast.success("Successfully logged in!");
-      router.push("/");
+      router.push(callbackUrl);
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
@@ -59,7 +59,7 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      await signIn(provider, { callbackUrl: "/" });
+      await signIn(provider, { callbackUrl });
     } catch (error) {
       console.error(`${provider} sign in error:`, error);
       toast.error(`Failed to sign in with ${provider}`);
