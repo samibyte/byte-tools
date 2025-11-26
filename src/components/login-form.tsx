@@ -4,11 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { BottomGradient } from "./BottomGradient";
 import { LabelInputContainer } from "./LabelInputContainer";
@@ -19,7 +18,6 @@ interface Inputs {
 }
 
 export default function LoginForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
@@ -37,7 +35,8 @@ export default function LoginForm() {
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: false,
+        redirect: true,
+        callbackUrl,
       });
 
       if (result?.error) {
@@ -46,7 +45,6 @@ export default function LoginForm() {
       }
 
       toast.success("Successfully logged in!");
-      router.push(callbackUrl);
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");

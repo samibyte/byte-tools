@@ -6,7 +6,7 @@ export const Logo = () => {
     <Link href="/">
       <Image
         src="/byte-tools-logo.png"
-        width={60}
+        width={50}
         height={60}
         alt="byte tools logo"
         className="cursor-pointer"
