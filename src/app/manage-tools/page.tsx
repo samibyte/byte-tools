@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import toast from "react-hot-toast";
 
 interface Tool {
   _id: string;
@@ -87,7 +88,7 @@ export default function ManageToolsPage() {
       setDeleteId(null);
     } catch (err) {
       console.error("Failed to delete tool:", err);
-      alert("Failed to delete tool. Please try again.");
+      toast.error("Failed to delete tool. Please try again.");
     } finally {
       setIsDeleting(false);
     }

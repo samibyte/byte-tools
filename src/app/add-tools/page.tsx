@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import toast from "react-hot-toast";
 
 const CATEGORIES = [
   "Developer Tools",
@@ -27,26 +28,32 @@ const CATEGORIES = [
   "Other",
 ];
 
+interface ToolFormValues {
+  title: string;
+  description: string;
+  category: string;
+  price: string;
+  image?: string;
+  rating: string;
+}
+
 export default function AddProductPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ───────────────────────────────
-  // React Hook Form
-  // ───────────────────────────────
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm({
+  } = useForm<ToolFormValues>({
     defaultValues: {
       title: "",
       description: "",
       category: "",
       price: "",
-      image: "", // optional now
+      image: "",
       rating: "0",
     },
   });
@@ -61,7 +68,6 @@ export default function AddProductPage() {
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState("");
 
-  // ───────────── TAGS ─────────────
   const addTag = () => {
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
       setTags([...tags, tagInput.trim()]);
@@ -73,7 +79,6 @@ export default function AddProductPage() {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
-  // ─────────── FEATURES ───────────
   const addFeature = () => {
     if (featureInput.trim() && !features.includes(featureInput.trim())) {
       setFeatures([...features, featureInput.trim()]);
@@ -85,9 +90,9 @@ export default function AddProductPage() {
     setFeatures(features.filter((f) => f !== featureToRemove));
   };
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: ToolFormValues) => {
     if (tags.length === 0) {
-      alert("At least one tag is required");
+      toast.error("At least one tag is required");
       return;
     }
 
@@ -149,7 +154,6 @@ export default function AddProductPage() {
       {/* Form */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          {/* Basic Information */}
           <div className="bg-card rounded-lg border p-6 space-y-6">
             <h2 className="text-xl font-semibold">Basic Information</h2>
 
@@ -258,7 +262,7 @@ export default function AddProductPage() {
 
             {/* Image & Rating */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Image (optional now) */}
+              {/* Image */}
               <div className="space-y-2">
                 <Label htmlFor="image">Image URL (optional)</Label>
                 <Input
