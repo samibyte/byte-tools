@@ -33,7 +33,7 @@ interface ToolFormValues {
   description: string;
   category: string;
   price: string;
-  image?: string;
+  image?: string | null;
   rating: string;
 }
 
@@ -105,7 +105,7 @@ export default function AddProductPage() {
         rating: parseFloat(values.rating),
         tags,
         features: features.length > 0 ? features : undefined,
-        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
       };
 
       const res = await fetch("/api/tools", {
@@ -115,9 +115,7 @@ export default function AddProductPage() {
       });
 
       if (!res.ok) throw new Error("Failed to create tool");
-
-      const data = await res.json();
-      router.push(`/tools/${data._id}`);
+      router.push(`/manage-tools`);
     } catch (err) {
       console.error("Failed to create tool:", err);
       alert("Failed to create tool. Please try again.");
@@ -264,15 +262,27 @@ export default function AddProductPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Image */}
               <div className="space-y-2">
-                <Label htmlFor="image">Image URL (optional)</Label>
+                <Label htmlFor="image">
+                  Image URL <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   {...register("image", {
-                    validate: (v) =>
-                      !v ||
-                      v.startsWith("http") ||
-                      "Must be a valid URL starting with http",
+                    required: "Please add an image URL",
+                    validate: (value) => {
+                      if (!value) return true;
+                      if (value.startsWith("data:")) return true;
+                      try {
+                        const url = new URL(value);
+                        return url.protocol === "http:" ||
+                          url.protocol === "https:"
+                          ? true
+                          : "URL must start with http, https, or data";
+                      } catch {
+                        return "Must be a valid URL";
+                      }
+                    },
                   })}
-                  placeholder="https://example.com/image.jpg"
+                  placeholder="https://example.com/image.jpg or data:image/png;base64,..."
                   type="url"
                   className={errors.image ? "border-destructive" : ""}
                 />

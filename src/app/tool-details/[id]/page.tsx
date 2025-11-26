@@ -18,7 +18,7 @@ interface Tool {
   rating: number;
   tags: string[];
   features?: string[];
-  updatedAt: string;
+  createdAt: string;
 }
 
 export default function ToolDetailsPage() {
@@ -71,7 +71,7 @@ export default function ToolDetailsPage() {
     );
   }
 
-  const formattedDate = new Date(tool.updatedAt).toLocaleDateString("en-US", {
+  const formattedDate = new Date(tool.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -198,7 +198,7 @@ export default function ToolDetailsPage() {
           <div className="border-t" />
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
-            <span>Last updated: {formattedDate}</span>
+            <span>Created at: {formattedDate}</span>
           </div>
 
           {/* CTA Button */}

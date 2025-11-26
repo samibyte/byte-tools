@@ -29,7 +29,7 @@ interface Tool {
   image: string;
   rating: number;
   tags: string[];
-  updatedAt: string;
+  createdAt: string;
 }
 
 export default function ManageToolsPage() {
@@ -173,7 +173,7 @@ export default function ManageToolsPage() {
                       Rating
                     </th>
                     <th className="text-left p-4 font-semibold text-sm">
-                      Updated
+                      Created
                     </th>
                     <th className="text-right p-4 font-semibold text-sm">
                       Actions
@@ -220,7 +220,7 @@ export default function ManageToolsPage() {
                       </td>
                       <td className="p-4">
                         <span className="text-sm text-muted-foreground">
-                          {new Date(tool.updatedAt).toLocaleDateString()}
+                          {new Date(tool.createdAt).toLocaleDateString()}
                         </span>
                       </td>
                       <td className="p-4">
@@ -297,7 +297,7 @@ export default function ManageToolsPage() {
                       <span>{tool.rating.toFixed(1)}</span>
                     </div>
                     <div className="ml-auto text-muted-foreground">
-                      {new Date(tool.updatedAt).toLocaleDateString()}
+                      {new Date(tool.createdAt).toLocaleDateString()}
                     </div>
                   </div>
 
