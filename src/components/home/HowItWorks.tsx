@@ -5,6 +5,7 @@ import { motion, useInView } from "motion/react";
 import { Search, CheckCircle, Bookmark, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StepCard from "./ui/StepCard";
+import Link from "next/link";
 
 const steps = [
   {
@@ -99,10 +100,12 @@ export default function HowItWorks() {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="text-center mt-16"
         >
-          <Button size="lg" className="gap-2 px-8 rounded-full">
-            Start Exploring Tools
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+          <Link href="/discover-tools">
+            <Button size="lg" className="gap-2 px-8 rounded-full">
+              Start Exploring Tools
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
