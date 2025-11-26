@@ -38,11 +38,11 @@ const ToolCard = React.memo<ToolCardProps>(
     const radius = 270;
     const [visible, setVisible] = React.useState(false);
 
-    let mouseX = useMotionValue(0);
-    let mouseY = useMotionValue(0);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
     function handleMouseMove({ currentTarget, clientX, clientY }: any) {
-      let { left, top } = currentTarget.getBoundingClientRect();
+      const { left, top } = currentTarget.getBoundingClientRect();
 
       mouseX.set(clientX - left);
       mouseY.set(clientY - top);
@@ -68,7 +68,7 @@ const ToolCard = React.memo<ToolCardProps>(
           {/* Image */}
           <div className="relative overflow-hidden aspect-video bg-muted">
             <Image
-              src={image && image}
+              src={image}
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

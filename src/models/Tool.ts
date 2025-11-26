@@ -9,7 +9,7 @@ const ToolSchema = new Schema(
     image: String,
     rating: Number,
     tags: [String],
-    updatedAt: Date,
+    createdAt: Date,
     features: [String],
   },
   { timestamps: true }
