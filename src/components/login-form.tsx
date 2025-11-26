@@ -68,7 +68,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="shadow-input mx-auto mt-20 w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+    <div className="shadow-input mx-auto mt-20 w-full max-w-md rounded-none bg-card p-4 md:rounded-2xl md:p-8">
       <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
         Welcome Back
       </h2>
@@ -122,7 +122,7 @@ export default function LoginForm() {
         {/* Forgot Password Link */}
         <div className="mb-6 text-right">
           <Link
-            href="/forgot-password"
+            href="#"
             className="text-sm text-neutral-600 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
           >
             Forgot password?
@@ -130,7 +130,7 @@ export default function LoginForm() {
         </div>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="group/btn relative block h-10 w-full rounded-md bg-primary font-medium text-primary-foreground shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset]  dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={isLoading}
         >
@@ -142,7 +142,7 @@ export default function LoginForm() {
 
         <div className="flex flex-col space-y-4">
           <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group/btn shadow-input relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-secondary px-4 font-medium text-secondary-foreground dark:shadow-[0px_0px_1px_1px_#262626] disabled:opacity-50 disabled:cursor-not-allowed"
             type="button"
             onClick={() => handleOAuthSignIn("google")}
             disabled={isLoading}
@@ -154,7 +154,7 @@ export default function LoginForm() {
             <BottomGradient />
           </button>
           <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group/btn shadow-input relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-secondary px-4 font-medium text-secondary-foreground dark:shadow-[0px_0px_1px_1px_#262626] disabled:opacity-50 disabled:cursor-not-allowed"
             type="button"
             onClick={() => handleOAuthSignIn("github")}
             disabled={isLoading}
