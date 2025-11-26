@@ -2,17 +2,11 @@
 
 import * as React from "react";
 import { useEffect, useState, useRef } from "react";
-import {
-  BellIcon,
-  HelpCircleIcon,
-  UserIcon,
-  ChevronDownIcon,
-} from "lucide-react";
+import { BellIcon, HelpCircleIcon, ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import {
@@ -31,40 +25,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { ComponentProps } from "react";
-
-// Simple logo component for the navbar
-const Logo = (props: React.SVGAttributes<SVGElement>) => {
-  return (
-    <svg
-      width="1em"
-      height="1em"
-      viewBox="0 0 324 323"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <rect
-        x="88.1023"
-        y="144.792"
-        width="151.802"
-        height="36.5788"
-        rx="18.2894"
-        transform="rotate(-38.5799 88.1023 144.792)"
-        fill="currentColor"
-      />
-      <rect
-        x="85.3459"
-        y="244.537"
-        width="151.802"
-        height="36.5788"
-        rx="18.2894"
-        transform="rotate(-38.5799 85.3459 244.537)"
-        fill="currentColor"
-      />
-    </svg>
-  );
-};
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { Logo } from "@/components/Logo";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 // Hamburger icon component
 const HamburgerIcon = ({
@@ -182,14 +147,14 @@ const NotificationMenu = ({
 
 // User Menu Component
 const UserMenu = ({
-  userName = "John Doe",
-  userEmail = "john@example.com",
+  userName,
+  userEmail,
   userAvatar,
   onItemClick,
 }: {
-  userName?: string;
-  userEmail?: string;
-  userAvatar?: string;
+  userName?: string | null;
+  userEmail?: string | null;
+  userAvatar?: string | null;
   onItemClick?: (item: string) => void;
 }) => (
   <DropdownMenu>
@@ -199,12 +164,15 @@ const UserMenu = ({
         className="h-9 px-2 py-0 hover:bg-accent hover:text-accent-foreground"
       >
         <Avatar className="h-7 w-7">
-          <AvatarImage src={userAvatar} alt={userName} />
+          <AvatarImage src={userAvatar || undefined} alt={userName || "User"} />
           <AvatarFallback className="text-xs">
             {userName
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
+              ? userName
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()
+              : "U"}
           </AvatarFallback>
         </Avatar>
         <ChevronDownIcon className="h-3 w-3 ml-1" />
@@ -231,7 +199,7 @@ const UserMenu = ({
         Billing
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => onItemClick?.("logout")}>
+      <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
         Log out
       </DropdownMenuItem>
     </DropdownMenuContent>
@@ -240,7 +208,7 @@ const UserMenu = ({
 
 // Types
 export interface Navbar05NavItem {
-  href?: string;
+  href: string;
   label: string;
 }
 
@@ -248,9 +216,9 @@ export interface Navbar05Props extends React.HTMLAttributes<HTMLElement> {
   logo?: React.ReactNode;
   logoHref?: string;
   navigationLinks?: Navbar05NavItem[];
-  userName?: string;
-  userEmail?: string;
-  userAvatar?: string;
+  userName?: string | null;
+  userEmail?: string | null;
+  userAvatar?: string | null;
   notificationCount?: number;
   onNavItemClick?: (href: string) => void;
   onInfoItemClick?: (item: string) => void;
@@ -260,24 +228,21 @@ export interface Navbar05Props extends React.HTMLAttributes<HTMLElement> {
 
 // Default navigation links
 const defaultNavigationLinks: Navbar05NavItem[] = [
-  { href: "#", label: "Home" },
-  { href: "#", label: "Discover Tools" },
-  { href: "#", label: "My Tools" },
-  { href: "#", label: "Add Tools" },
+  { href: "/", label: "Home" },
+  { href: "/discover-tools", label: "Discover Tools" },
+  { href: "/manage-tools", label: "Manage Tools" },
+  { href: "/add-tools", label: "Add Tools" },
 ];
 
 export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
   (
     {
       className,
-      logo = <Logo />,
-      logoHref = "#",
       navigationLinks = defaultNavigationLinks,
-      userName = "John Doe",
-      userEmail = "john@example.com",
+      userName,
+      userEmail,
       userAvatar,
       notificationCount = 3,
-      onNavItemClick,
       onInfoItemClick,
       onNotificationItemClick,
       onUserItemClick,
@@ -292,7 +257,7 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
       const checkWidth = () => {
         if (containerRef.current) {
           const width = containerRef.current.offsetWidth;
-          setIsMobile(width < 768); // 768px is md breakpoint
+          setIsMobile(width < 768);
         }
       };
 
@@ -308,7 +273,6 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
       };
     }, []);
 
-    // Combine refs
     const combinedRef = React.useCallback(
       (node: HTMLElement | null) => {
         containerRef.current = node;
@@ -320,12 +284,13 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
       },
       [ref]
     );
+    const pathname = usePathname();
 
     return (
       <header
         ref={combinedRef}
         className={cn(
-          "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline",
+          "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 px-4 md:px-6 **:no-underline",
           className
         )}
         {...props}
@@ -333,6 +298,7 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
         <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-4">
           {/* Left side */}
           <div className="flex items-center gap-2">
+            {!isMobile && <Logo />}
             {/* Mobile menu trigger */}
             {isMobile && (
               <Popover>
@@ -350,16 +316,12 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
                     <NavigationMenuList className="flex-col items-start gap-0">
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index} className="w-full">
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (onNavItemClick && link.href)
-                                onNavItemClick(link.href);
-                            }}
-                            className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline"
+                          <Link
+                            href={link.href}
+                            className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground no-underline"
                           >
                             {link.label}
-                          </button>
+                          </Link>
                         </NavigationMenuItem>
                       ))}
                     </NavigationMenuList>
@@ -367,15 +329,6 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
                 </PopoverContent>
               </Popover>
             )}
-            <button
-              onClick={(e) => e.preventDefault()}
-              className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
-            >
-              <div className="text-2xl">{logo}</div>
-              <span className="hidden font-bold text-xl sm:inline-block">
-                shadcn.io
-              </span>
-            </button>
           </div>
           {/* Main nav */}
           <div className="flex items-center gap-6">
@@ -383,44 +336,73 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
             {!isMobile && (
               <NavigationMenu className="flex">
                 <NavigationMenuList className="gap-1">
-                  {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index}>
-                      <NavigationMenuLink
-                        href={link.href}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (onNavItemClick && link.href)
-                            onNavItemClick(link.href);
-                        }}
-                        className="text-muted-foreground hover:text-primary py-1.5 font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                      >
-                        {link.label}
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  ))}
+                  {navigationLinks.map((link, index) => {
+                    const isActive =
+                      link.href === "/"
+                        ? pathname === "/"
+                        : pathname.startsWith(link.href);
+
+                    return (
+                      <NavigationMenuItem key={index}>
+                        <Link
+                          href={link.href}
+                          className={clsx(
+                            "text-muted-foreground hover:text-primary font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm",
+                            {
+                              "bg-secondary text-primary": isActive,
+                            }
+                          )}
+                        >
+                          {link.label}
+                        </Link>
+                      </NavigationMenuItem>
+                    );
+                  })}
                 </NavigationMenuList>
               </NavigationMenu>
             )}
           </div>
           {/* Right side */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              {/* Info menu */}
-              <InfoMenu onItemClick={onInfoItemClick} />
-              {/* Notification */}
-              <NotificationMenu
-                notificationCount={notificationCount}
-                onItemClick={onNotificationItemClick}
+          {userEmail ? (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                {/* Info menu */}
+                <InfoMenu onItemClick={onInfoItemClick} />
+                {/* Notification */}
+                <NotificationMenu
+                  notificationCount={notificationCount}
+                  onItemClick={onNotificationItemClick}
+                />
+              </div>
+              {/* User menu */}
+              <UserMenu
+                userName={userName}
+                userEmail={userEmail}
+                userAvatar={userAvatar}
+                onItemClick={onUserItemClick}
               />
             </div>
-            {/* User menu */}
-            <UserMenu
-              userName={userName}
-              userEmail={userEmail}
-              userAvatar={userAvatar}
-              onItemClick={onUserItemClick}
-            />
-          </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Link href="/login">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                >
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button
+                  size="sm"
+                  className="text-sm font-medium px-4 h-9 rounded-md shadow-sm"
+                >
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </header>
     );
@@ -429,4 +411,4 @@ export const Navbar05 = React.forwardRef<HTMLElement, Navbar05Props>(
 
 Navbar05.displayName = "Navbar05";
 
-export { Logo, HamburgerIcon, InfoMenu, NotificationMenu, UserMenu };
+export { HamburgerIcon, InfoMenu, NotificationMenu, UserMenu };
