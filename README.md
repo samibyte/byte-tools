@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ByteTools -- Developer Utility Marketplace
 
-## Getting Started
+ByteTools is a curated marketplace for lightweight developer tools.
+Built with Next.js 16, MongoDB, NextAuth, Tailwind, and shadcn/ui, it
+provides authentication, tool management, and a polished UI.
 
-First, run the development server:
+## Installation (pnpm)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+### 1. Clone
+
+git clone https://github.com/your-username/byte-tools.git cd byte-tools
+
+### 2. Install
+
+pnpm install
+
+### 3. Environment variables (.env.local)
+
+MONGODB_URI=your_mongodb_uri\
+NEXTAUTH_SECRET=your_secret\
+NEXTAUTH_URL=http://localhost:3000\
+GITHUB_ID=your_github_client_id\
+GITHUB_SECRET=your_github_secret\
+GOOGLE_CLIENT_ID=your_google_id\
+GOOGLE_CLIENT_SECRET=your_google_secret
+
+### 4. Run
+
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Route Summary
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Public
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- / --- Landing
+- /login --- Login
+- /register --- Register
+- /discover-tools --- All tools
+- /tool-details/\[id\] --- Tool details
 
-## Learn More
+### Protected
 
-To learn more about Next.js, take a look at the following resources:
+- /add-tools --- Add tool
+- /manage-tools --- Manage tools
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- /api/auth/\[...nextauth\] --- Authentication
+- /api/tools --- GET all
+- /api/tools/latest --- GET latest 6
+- /api/tools --- POST create
+- /api/tools/\[id\] --- GET/PUT/DELETE
